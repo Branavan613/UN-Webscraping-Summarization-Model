@@ -73,6 +73,36 @@ function ChatInterface() {
       console.error('Error fetching chat history:', error);
     }
   };
+  const handleDeleteCollection = async (collectionName) => {
+    // Show a confirmation prompt
+    const isConfirmed = window.confirm(`Are you sure you want to delete the collection "${collectionName}"?`);
+
+    if (isConfirmed) {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/del-collection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ keyword: collectionName }),
+        });
+        const data = await response.json();
+        if (data.keyword) {
+          // Remove the deleted collection from the state
+          setCollections((prev) => prev.filter((col) => col !== collectionName));
+          if (selectedCollection === collectionName) {
+            setSelectedCollection('');
+          }
+          console.log(`Collection "${collectionName}" deleted successfully.`);
+        } else {
+          console.error(`Error deleting collection: ${data.error}`);
+        }
+      } catch (error) {
+        console.error('Error deleting collection:', error);
+      }
+    } else {
+      console.log(`Deletion of collection "${collectionName}" canceled.`);
+    }
+  };
+
 
   // Handle user asking a question
   const handleAsk = async (e) => {
@@ -142,27 +172,58 @@ function ChatInterface() {
       >
         <h2>Collections</h2>
         {collections.map((collection, idx) => (
-          <button
+          <div
             key={idx}
-            onClick={() => handleCollectionSelect(collection)}
             style={{
-              display: 'block',
-              margin: '10px 0',
-              padding: '10px',
-              width: '100%',
-              textAlign: 'left',
-              backgroundColor: selectedCollection === collection ? '#fff' : '#f0f0f0',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              color: 'black',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '10px',
             }}
           >
-            {collection}
-          </button>
+            <button
+              key={idx}
+              onClick={() => handleCollectionSelect(collection)}
+              style={{
+                display: 'block',
+                padding: '10px',
+                width: '100%',
+                textAlign: 'left',
+                backgroundColor: selectedCollection === collection ? '#fff' : '#f0f0f0',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                color: 'black',
+                transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#e2e6ea'} // Light grey on hover
+              onMouseLeave={(e) => e.target.style.backgroundColor = selectedCollection === collection ? '#fff' : '#f0f0f0'} // Reset to original color on mouse leave
+            >
+              {collection}
+            </button>
+
+            <button
+              onClick={() => handleDeleteCollection(collection)}
+              style={{
+                marginLeft: '10px',
+                padding: '5px 10px',
+                backgroundColor: '#d9d9d9', // Grey color
+                color: '#fff',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+              }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#5a6268'} // Darker grey on hover
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#d9d9d9'} // Reset to original grey on mouse leave
+              title={`Delete ${collection}`}
+            >
+              Delete
+            </button>
+
+          </div>
         ))}
       </div>
-
       {/* Right column: Chat interface */}
       <div className="chat-container" style={{ width: '70%', padding: '20px' }}>
         <h1>Chat - Topic: {selectedCollection}</h1>

@@ -38,6 +38,26 @@ class Citation(db.Model):
     page = db.Column(db.Integer, default = 0)
     messageid = db.Column(db.Integer, db.ForeignKey('message.id'), nullable = False)
 
+def delete_chat(keyword):
+    """
+    Delete a chat and all its associated messages and citations based on the keyword.
+    """
+    # Find the chat by keyword
+    chat = Chat.query.filter_by(keyword=keyword).first()
+
+    if chat:
+        # Delete all associated messages and citations
+        for message in chat.messages:
+            for citation in message.citations:
+                db.session.delete(citation)
+            db.session.delete(message)
+        
+        # Delete the chat itself
+        db.session.delete(chat)
+        db.session.commit()
+        print(f"Chat with keyword '{keyword}' and all its associated data have been deleted.")
+    else:
+        print(f"No chat found with the keyword '{keyword}'.")
 
 def get_all_chat_keywords():
     """

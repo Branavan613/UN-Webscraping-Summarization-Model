@@ -4,7 +4,7 @@ import asyncio
 import threading
 from un_scrape import c_call, c_create, c_del, c_reset, scraper  # Import scraped links
 from un_main import main as chatbot_main, ota_speech_chat_completion, ask_q # Import chatbot functions
-from chat_storing import app_, get_messages, save_message, create_chat, is_keyword_existing, get_all_chat_keywords, save_citations, get_citations
+from chat_storing import app_, get_messages, save_message, create_chat, is_keyword_existing, get_all_chat_keywords, save_citations, get_citations, delete_chat
   # Enable Cross-Origin Resource Sharing (CORS)
 
 
@@ -45,17 +45,19 @@ def get_collection():
     messages = chat_history()
     return jsonify({'messages': messages},
                    {'collection': collection})
+'''
 
-@app_.route('/del-collection', method=['DELETE'])
+@app_.route('/del-collection', methods=['POST'])
 def del_collection():
     data = request.get_json()
     keyword = data.get('keyword', '')
     if not keyword:
         return jsonify({'error': 'No collection provided'}), 400
+    delete_chat(keyword)
     c_del(keyword)
     return jsonify({'keyword': keyword})
 
-'''
+
 # Endpoint to ask a question
 @app_.route('/ask', methods=['POST'])
 def ask_question():
