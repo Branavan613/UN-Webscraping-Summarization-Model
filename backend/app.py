@@ -23,6 +23,7 @@ def scrape():
     create_chat(str(name))
     name, error = asyncio.run(scraper(subject, name))
     if error == 1:
+        delete_chat(name)
         return jsonify({'error': 'Provided databse does not exist'})
     print("hi")
     print("bye")

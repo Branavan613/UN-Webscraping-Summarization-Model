@@ -204,25 +204,25 @@ async def scraper(keyword, name):
         button.click()
 
         time.sleep(2)
-
-        first_span = driver.find_element(By.CSS_SELECTOR, '.search-criteria > span')
-
-        pagenum = int(first_span.find_elements(By.TAG_NAME, "b")[-1].text)
-        
-        links = []
-        o_links = []
         try:
+            first_span = driver.find_element(By.CSS_SELECTOR, '.search-criteria > span')
+
+            pagenum = int(first_span.find_elements(By.TAG_NAME, "b")[-1].text)
+            
+            links = []
+            o_links = []
             links, o_links = await linkpull(links, o_links)
+            max = math.ceil(pagenum/20)-1
+            if max > 25:
+                max = math.ceil(max/2)
+                
+            for page in range(max):
+                await next()
+                links, o_links = await linkpull(links, o_links)
         except:
             print("keyword does not exist")
             error = 1
-        max = math.ceil(pagenum/20)-1
-        if max > 25:
-            max = math.ceil(max/2)
-            
-        for page in range(max):
-            await next()
-            links, o_links = await linkpull(links, o_links)
+            links = []
         
         if links: 
             name = await embedder(links, name, c_create)
