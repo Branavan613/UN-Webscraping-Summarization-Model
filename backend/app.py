@@ -21,7 +21,9 @@ def scrape():
             'keyword': name
         })
     create_chat(str(name))
-    asyncio.run(scraper(subject, name))
+    name, error = asyncio.run(scraper(subject, name))
+    if error == 1:
+        return jsonify({'error': 'Provided databse does not exist'})
     print("hi")
     print("bye")
     return jsonify({'keyword': name})

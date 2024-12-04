@@ -211,7 +211,11 @@ async def scraper(keyword, name):
         
         links = []
         o_links = []
-        links, o_links = await linkpull(links, o_links)
+        try:
+            links, o_links = await linkpull(links, o_links)
+        except:
+            print("keyword does not exist")
+            error = 1
         max = math.ceil(pagenum/20)-1
         if max > 25:
             max = math.ceil(max/2)
@@ -222,10 +226,11 @@ async def scraper(keyword, name):
         
         if links: 
             name = await embedder(links, name, c_create)
+            error = 0
         else:
             print("oops")
         driver.quit()
-    return name
+    return name, error
         
     
     

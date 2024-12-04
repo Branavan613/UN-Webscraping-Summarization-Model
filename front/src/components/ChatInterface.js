@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 function Citations({ citations }) {
@@ -25,6 +25,7 @@ function Citations({ citations }) {
 
 function ChatInterface() {
   const { topic } = useParams();
+  const navigate = useNavigate(); // Hook for navigation
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(topic || '');
   const [messages, setMessages] = useState([]);
@@ -73,6 +74,7 @@ function ChatInterface() {
       console.error('Error fetching chat history:', error);
     }
   };
+
   const handleDeleteCollection = async (collectionName) => {
     // Show a confirmation prompt
     const isConfirmed = window.confirm(`Are you sure you want to delete the collection "${collectionName}"?`);
@@ -103,7 +105,6 @@ function ChatInterface() {
     }
   };
 
-
   // Handle user asking a question
   const handleAsk = async (e) => {
     e.preventDefault();
@@ -119,13 +120,13 @@ function ChatInterface() {
       if (data.error) {
         console.log(data.error)
       } else {
-         await fetch('http://127.0.0.1:5000/chat-save', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 'keyword': selectedCollection, 'content': [question, data.answer], 'citations': data.citation })
-            })
+        await fetch('http://127.0.0.1:5000/chat-save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ 'keyword': selectedCollection, 'content': [question, data.answer], 'citations': data.citation })
+        });
       }
       fetchChatHistory(selectedCollection);
     } catch (error) {
@@ -209,7 +210,7 @@ function ChatInterface() {
                 padding: '5px 10px',
                 backgroundColor: '#d9d9d9', // Grey color
                 color: '#fff',
-                border: 'none',
+                border: '1px solid #ccc',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 transition: 'background-color 0.3s ease', // Smooth transition for hover effect
@@ -220,9 +221,34 @@ function ChatInterface() {
             >
               Delete
             </button>
-
           </div>
         ))}
+        
+        {/* Add Collection Button at the bottom */}
+        <button
+          onClick={() => navigate('/')} // Navigate to CollectionInput page
+          style={{
+            position: 'absolute',
+            bottom: '20px',
+            width: '20%',
+            padding: '10px',
+            backgroundColor: '#fff', // Blue color
+            color: 'black',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s ease', // Smooth transition for hover effect
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = '#5a6268';
+            e.target.style.color = '#fff'}} // Darker blue on hover
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = '#fff';
+            e.target.style.color = 'black'}} // Reset to original blue on mouse leave
+          
+        >
+          Add Collection
+        </button>  
       </div>
       {/* Right column: Chat interface */}
       <div className="chat-container" style={{ width: '70%', padding: '20px' }}>
@@ -253,7 +279,7 @@ function ChatInterface() {
               }}
             >
               <span>
-                  {msg.role === 1 ? msg.content : <ReactMarkdown>{msg.content}</ReactMarkdown>}
+                {msg.role === 1 ? msg.content : <ReactMarkdown>{msg.content}</ReactMarkdown>}
               </span>
               <Citations citations={ msg.citations } />
             </div>
@@ -279,8 +305,11 @@ function ChatInterface() {
               borderRadius: '4px',
               cursor: 'pointer',
             }}
+            onMouseEnter={(e) => e.target.style.backgroundColor = '#0056b3'} // Darker blue on hover
+            onMouseLeave={(e) => e.target.style.backgroundColor = '#007bff'} // Reset to original blue on mouse leave
           >
             {loading ? 'Thinking...' : 'Send'}
+            
           </button>
         </form>
       </div>
