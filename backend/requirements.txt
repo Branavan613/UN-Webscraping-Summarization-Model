@@ -1,0 +1,12 @@
+asyncio
+groq
+langchain_community
+langchain
+langchain_huggingface
+ollama
+chromadb
+Flask
+flask-cors
+selenium
+beautifulsoup4
+fitz
