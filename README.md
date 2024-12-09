@@ -16,7 +16,6 @@ The chatbot leverages vector storing and similarity search algorithms to help in
 - **AI Chatbot Interface**: Enables interactive querying of document content.
 - **Multi-language Support**: Processes documents in multiple languages.
 - **Scalable Storage**: Embeds processed summaries into ChromaDB for efficient retrieval.
-- **Real-time Updates**: Periodically scrapes new documents and integrates them into the database.
 
 ---
 
