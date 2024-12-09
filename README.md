@@ -65,5 +65,5 @@ The chatbot leverages vector storing and similarity search algorithms to help in
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
-Llama-3.1 & Hugging Face: For providing state-of-the-art LLM and embedding models.
-UN OHCHR: For the source documents and their invaluable contributions to human rights work.
+- Llama-3.1 & Hugging Face: For providing state-of-the-art LLM and embedding models.
+- UN OHCHR: For the source documents and their invaluable contributions to human rights work.
