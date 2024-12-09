@@ -61,9 +61,9 @@ The chatbot leverages vector storing and similarity search algorithms to help in
    ```
 5. Explore the program! Define your own search collection, let the program automatically scrape the documents from UN's official document database and once completed, research hundreds of documents in seconds
 
-##License
+## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-##Acknowledgments
+## Acknowledgments
 Llama-3.1 & Hugging Face: For providing state-of-the-art LLM and embedding models.
 UN OHCHR: For the source documents and their invaluable contributions to human rights work.
