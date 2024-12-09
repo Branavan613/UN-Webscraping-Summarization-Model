@@ -29,7 +29,7 @@ The chatbot leverages vector storing and similarity search algorithms to help in
 ### Python Dependencies
 - Selenium
 - BeautifulSoup (bs4)
-- 
+- PyMuPDF
 - ChromaDB
 - Hugging Face Transformers
 
