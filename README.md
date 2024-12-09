@@ -49,7 +49,17 @@ The chatbot leverages vector storing and similarity search algorithms to help in
    cd front
    npm install
    ```
-4. Start the program
+4. Set up environment variables:
+- Add your GROQ_API_KEY to the .env file:
+
+5. Install ollama:
+Follow the instructions on the Ollama GitHub page or the official website to install the ollama CLI tool.
+
+7. After installing ollama, run the following command to pull the nomic-embed-text model:
+```bash
+ollama pull nomic-embed-text
+```
+8. Start the program
    In Backend:
    ```bash
    python app.py
@@ -58,7 +68,7 @@ The chatbot leverages vector storing and similarity search algorithms to help in
    ```bash
    npm start
    ```
-5. Explore the program! Define your own search collection, let the program automatically scrape the documents from UN's official document database and once completed, research hundreds of documents in seconds
+9. Explore the program! Define your own search collection, let the program automatically scrape the documents from UN's official document database and once completed, research hundreds of documents in seconds
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
